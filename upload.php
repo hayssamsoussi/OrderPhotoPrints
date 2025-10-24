@@ -68,7 +68,7 @@ $orderProducts = $stmt->fetchAll();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload Photos - <?php echo htmlspecialchars($client['name']); ?></title>
-    <link rel="stylesheet" href="assets/css/client.css?v=2">
+    <link rel="stylesheet" href="assets/css/client.css?v=<?php echo filemtime('style.css'); ?>">
 </head>
 <body>
     <div class="container">
@@ -262,7 +262,7 @@ $orderProducts = $stmt->fetchAll();
         const UNIQUE_CODE = '<?php echo $uniqueCode; ?>';
         const ORDER_STATUS = '<?php echo $status; ?>';
     </script>
-    <script src="assets/js/client.js"></script>
+    <script src="assets/js/client.js?v=<?php echo filemtime('style.css'); ?>"></script>
 </body>
 </html>
 
