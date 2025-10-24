@@ -6,10 +6,6 @@
  * Delete this file after installation for security.
  */
 
-// Check if already installed
-if (file_exists('config.php') && filesize('config.php') > 100) {
-    die('Platform already installed. Please access admin_login.php to use the platform.');
-}
 
 ?>
 <!DOCTYPE html>
