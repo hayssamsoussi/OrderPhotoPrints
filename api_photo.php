@@ -111,6 +111,37 @@ if ($action === 'update_quantity') {
         ]
     ]);
     
+} elseif ($action === 'get_options') {
+    // Get photo options
+    $stmt = $db->prepare("
+        SELECT has_frame, has_woodboard, bigger_size 
+        FROM photo_options 
+        WHERE photo_id = ?
+    ");
+    $stmt->execute([$photoId]);
+    $options = $stmt->fetch();
+    
+    if ($options) {
+        echo json_encode([
+            'success' => true,
+            'options' => [
+                'has_frame' => (bool)$options['has_frame'],
+                'has_woodboard' => (bool)$options['has_woodboard'],
+                'bigger_size' => (bool)$options['bigger_size']
+            ]
+        ]);
+    } else {
+        // Return default values if no options exist
+        echo json_encode([
+            'success' => true,
+            'options' => [
+                'has_frame' => false,
+                'has_woodboard' => false,
+                'bigger_size' => false
+            ]
+        ]);
+    }
+    
 } else {
     echo json_encode(['success' => false, 'error' => 'Invalid action']);
 }
