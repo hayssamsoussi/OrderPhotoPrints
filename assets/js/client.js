@@ -9,6 +9,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const uploadArea = document.getElementById('uploadArea');
     const fileInput = document.getElementById('fileInput');
     
+    // Don't initialize upload if order is in printing status
+    if (ORDER_STATUS === 'printing') {
+        return;
+    }
+    
+    if (!uploadArea || !fileInput) {
+        return;
+    }
+    
     // Click to upload
     uploadArea.addEventListener('click', () => fileInput.click());
     
@@ -36,6 +45,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Handle file uploads
 async function handleFiles(files) {
+    // Check if order is in printing status
+    if (ORDER_STATUS === 'printing') {
+        alert('Cannot upload photos while order is in printing status.');
+        return;
+    }
+    
     const uploadArea = document.getElementById('uploadArea');
     const progressContainer = document.getElementById('uploadProgress');
     const progressFill = document.getElementById('progressFill');
@@ -161,6 +176,12 @@ function uploadFile(file) {
 
 // Update photo quantity
 function updateQuantity(photoId, quantity) {
+    // Check if order is in printing status
+    if (ORDER_STATUS === 'printing') {
+        alert('Cannot modify quantities while order is in printing status.');
+        return;
+    }
+    
     const formData = new FormData();
     formData.append('quantity', quantity);
     
@@ -184,6 +205,12 @@ function updateQuantity(photoId, quantity) {
 
 // Delete photo
 function deletePhoto(photoId) {
+    // Check if order is in printing status
+    if (ORDER_STATUS === 'printing') {
+        alert('Cannot delete photos while order is in printing status.');
+        return;
+    }
+    
     if (!confirm('Are you sure you want to delete this photo?')) {
         return;
     }
@@ -220,6 +247,101 @@ function deletePhoto(photoId) {
 function updateSummary(order) {
     document.getElementById('summaryPhotos').textContent = order.total_photos;
     document.getElementById('summaryTotal').textContent = formatPrice(order.total_cost);
+    
+    // Reload page to get updated order data
+    setTimeout(() => {
+        location.reload();
+    }, 500);
+}
+
+// Add product to order
+function addProduct(productId) {
+    // Check if order is in printing status
+    if (ORDER_STATUS === 'printing') {
+        alert('Cannot add products while order is in printing status.');
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('product_id', productId);
+    formData.append('quantity', 1);
+    
+    fetch(`api_products.php?action=add_product&code=${UNIQUE_CODE}`, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Product added to order!');
+            location.reload();
+        } else {
+            alert('Failed to add product: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to add product');
+    });
+}
+
+// Remove product from order
+function removeProduct(orderProductId) {
+    // Check if order is in printing status
+    if (ORDER_STATUS === 'printing') {
+        alert('Cannot remove products while order is in printing status.');
+        return;
+    }
+    
+    if (!confirm('Are you sure you want to remove this product from your order?')) {
+        return;
+    }
+    
+    fetch(`api_products.php?action=remove_product&code=${UNIQUE_CODE}&order_product_id=${orderProductId}`, {
+        method: 'GET'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Product removed from order!');
+            location.reload();
+        } else {
+            alert('Failed to remove product: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to remove product');
+    });
+}
+
+// Update photo option
+function updatePhotoOption(photoId, option, checked) {
+    // Check if order is in printing status
+    if (ORDER_STATUS === 'printing') {
+        alert('Cannot modify options while order is in printing status.');
+        location.reload();
+        return;
+    }
+    
+    fetch(`api_photo_options.php?action=update_option&id=${photoId}&option=${option}&value=${checked}`, {
+        method: 'GET'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Reload to update totals
+            location.reload();
+        } else {
+            alert('Failed to update option: ' + data.error);
+            location.reload();
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to update option');
+        location.reload();
+    });
 }
 
 // Format price

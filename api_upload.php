@@ -32,6 +32,12 @@ if (!$order) {
     exit;
 }
 
+// Check if order is in printing status
+if ($order['status'] === 'printing') {
+    echo json_encode(['success' => false, 'error' => 'Cannot upload photos while order is in printing status']);
+    exit;
+}
+
 $orderId = $order['id'];
 
 // Handle file upload
@@ -80,14 +86,8 @@ $stmt = $db->prepare("INSERT INTO photos (order_id, filename, original_filename,
 $stmt->execute([$orderId, $filename, $file['name'], $relativePath]);
 $photoId = $db->lastInsertId();
 
-// Update order totals
-$stmt = $db->prepare("
-    UPDATE orders 
-    SET total_photos = (SELECT COUNT(*) FROM photos WHERE order_id = ?),
-        total_cost = (SELECT SUM(quantity * ?) FROM photos WHERE order_id = ?)
-    WHERE id = ?
-");
-$stmt->execute([$orderId, PRICE_PER_PHOTO, $orderId, $orderId]);
+// Recalculate order total
+recalculateOrderTotal($db, $orderId);
 
 // Get updated totals
 $stmt = $db->prepare("SELECT total_photos, total_cost FROM orders WHERE id = ?");
@@ -107,5 +107,47 @@ echo json_encode([
         'total_cost' => $updatedOrder['total_cost']
     ]
 ]);
+
+// Helper function to recalculate order total
+function recalculateOrderTotal($db, $orderId) {
+    // Calculate total from photos
+    $stmt = $db->prepare("
+        SELECT COALESCE(SUM(quantity * ?), 0) as photo_cost
+        FROM photos 
+        WHERE order_id = ?
+    ");
+    $stmt->execute([PRICE_PER_PHOTO, $orderId]);
+    $photoCost = $stmt->fetch()['photo_cost'];
+    
+    // Calculate total from order products
+    $stmt = $db->prepare("
+        SELECT COALESCE(SUM(quantity * price), 0) as product_cost
+        FROM order_products 
+        WHERE order_id = ?
+    ");
+    $stmt->execute([$orderId]);
+    $productCost = $stmt->fetch()['product_cost'];
+    
+    // Calculate total from photo options
+    $stmt = $db->prepare("
+        SELECT COALESCE(SUM(p.quantity * po.extra_cost), 0) as options_cost
+        FROM photos p
+        LEFT JOIN photo_options po ON p.id = po.photo_id
+        WHERE p.order_id = ?
+    ");
+    $stmt->execute([$orderId]);
+    $optionsCost = $stmt->fetch()['options_cost'];
+    
+    $totalCost = $photoCost + $productCost + $optionsCost;
+    
+    // Update order
+    $stmt = $db->prepare("
+        UPDATE orders 
+        SET total_photos = (SELECT COUNT(*) FROM photos WHERE order_id = ?),
+            total_cost = ?
+        WHERE id = ?
+    ");
+    $stmt->execute([$orderId, $totalCost, $orderId]);
+}
 ?>
 

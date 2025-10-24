@@ -148,6 +148,20 @@ header p {
     background: #f0f4ff;
 }
 
+.upload-disabled {
+    border: 3px dashed #ccc;
+    border-radius: 12px;
+    padding: 60px 20px;
+    text-align: center;
+    background: #f9f9f9;
+    color: #666;
+}
+
+.upload-disabled p {
+    font-size: 1.1rem;
+    margin: 0;
+}
+
 .upload-placeholder svg {
     color: #ccc;
     margin-bottom: 15px;
@@ -291,6 +305,193 @@ header p {
     border-color: #667eea;
 }
 
+.quantity-input:disabled {
+    background: #f5f5f5;
+    color: #999;
+    cursor: not-allowed;
+}
+
+.control-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.photo-options {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.options-label {
+    display: block;
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.options-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.option-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.85rem;
+    color: #333;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+.option-item:hover {
+    background: #f0f0f0;
+}
+
+.option-item input[type="checkbox"] {
+    cursor: pointer;
+}
+
+/* Products Section */
+.products-section {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.products-section h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.product-card {
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.product-card:hover {
+    border-color: #667eea;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+}
+
+.product-icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.product-card h3 {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.product-description {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.product-price {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #667eea;
+    margin-bottom: 15px;
+}
+
+.add-product-btn {
+    width: 100%;
+    padding: 10px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.add-product-btn:hover {
+    background: #5568d3;
+    transform: translateY(-2px);
+}
+
+/* Added Products Section */
+.added-products-section {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.added-products-section h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.added-products-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.added-product-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    background: #f8f9ff;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.product-name {
+    font-weight: 600;
+    color: #333;
+}
+
+.product-quantity {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.product-price {
+    font-weight: 600;
+    color: #667eea;
+}
+
+.remove-product-btn {
+    padding: 6px 12px;
+    background: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.remove-product-btn:hover {
+    background: #cc0000;
+}
+
 /* Summary Section */
 .summary-section {
     background: white;
@@ -356,6 +557,15 @@ header p {
     
     .upload-area {
         padding: 40px 15px;
+    }
+    
+    .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 15px;
+    }
+    
+    .options-grid {
+        grid-template-columns: 1fr;
     }
 }
 
