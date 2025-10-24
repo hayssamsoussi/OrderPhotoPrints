@@ -68,7 +68,7 @@ $orderProducts = $stmt->fetchAll();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload Photos - <?php echo htmlspecialchars($client['name']); ?></title>
-    <link rel="stylesheet" href="assets/css/client.css">
+    <link rel="stylesheet" href="assets/css/client.css?v=2">
 </head>
 <body>
     <div class="container">
