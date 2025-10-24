@@ -71,7 +71,7 @@ $orderProducts = $stmt->fetchAll();
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/client.css">
+    <link rel="stylesheet" href="assets/css/client.css?v=<?php echo filemtime('assets/css/client.css'); ?>">
 </head>
 <body>
     <!-- Announcement Bar -->
@@ -336,8 +336,8 @@ $orderProducts = $stmt->fetchAll();
         const UNIQUE_CODE = '<?php echo $uniqueCode; ?>';
         const ORDER_STATUS = '<?php echo $status; ?>';
     </script>
-    <!-- <script src="assets/js/client.js?v=<?php echo filemtime('style.css'); ?>"></script> -->
-    <script src="assets/js/client.js"></script>
+    <script src="assets/js/client.js?v=<?php echo filemtime('assets/css/client.css'); ?>"></script>
+    <!-- <script src="assets/js/client.js"></script> -->
 </body>
 </html>
 
